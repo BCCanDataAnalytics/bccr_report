@@ -1,0 +1,22 @@
+bookdown::gitbook:
+  anchor_sections: false
+  css: style2.css
+  table_css: false
+  includes:
+    before_body: hero-image.html
+    after_body: hero-image.html
+  toc_depth: 3
+  config:
+    toc:
+      collapse: section
+      before: |
+        <li class="toc-logo"><a href="http://www.bccancer.bc.ca/health-professionals/professional-resources/bc-cancer-registry"><img src="images/BCCancer_FINAL_RGB.png" width="187.5" height="112.5" align="left"/></a></li> |
+        <li><a href="./"><b>BC Cancer Registry<br>Annual Report</b></a></li>
+      after: |
+        <li><a href="https://github.com/rstudio/bookdown" target="blank">Published with bookdown</a></li>
+    toc_depth: 3
+    download: false
+    sharing:
+      twitter: true
+      facebook: false
+      all: false

@@ -1,0 +1,12 @@
+bookdown::gitbook:
+  includes:
+    in_header: hero-image.html
+  css: style2.css
+  config:
+    toc:
+      collapse: section
+      before: |
+        <li><a href="./">BC Cancer Registry Annual Report</a></li>
+      after: |
+        <li><a href="https://github.com/rstudio/bookdown" target="blank">Published with bookdown</a></li>
+    download: ["pdf", "epub"]
