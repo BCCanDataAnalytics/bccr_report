@@ -1,0 +1,87 @@
+p.caption {
+  color: #777;
+  margin-top: 10px;
+}
+p code {
+  white-space: inherit;
+}
+pre {
+  word-break: normal;
+  word-wrap: normal;
+}
+pre code {
+  white-space: inherit;
+}
+
+.hero-image {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+    width: 100%;
+      height: 390px;
+  object-fit: cover;
+  background-color: #000000;
+  opacity: 1.0
+}
+
+/*.hero-image:hover {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+    width: 100%;
+      height: 390px;
+  object-fit: cover;
+  background-color: #A9A9A9;
+  opacity: 0.9
+}*/
+
+.top-text {
+  position: relative;
+  font-size: 34px;
+  margin-top: 1em;
+  padding-bottom: 0.25em;
+  text-transform: uppercase;
+  text-align: center;
+  display: block; /* Change to `display: none` for no top text */
+  color: #ffffff72;
+}
+
+/*.bottom-text {
+  position: relative;
+  letter-spacing: 0.065em;
+  line-height: 1em;
+  font-size: 68px;
+  text-transform: uppercase;
+  text-align: center;
+  display: block; /* Change to `display: none` for no bottom text */
+/*  color: #ffffff;
+  margin-bottom: 2.5rem;
+  font-weight: bold;
+}*/
+
+.page-inner {
+  padding-top: 440px !important;
+}
+
+ .book .book-body .page-wrapper .page-inner {
+  max-width: 800 !important; /* change to 1000px */
+}
+
+.book .book-summary {
+    position: absolute;
+    font-size: 13px;
+    top: 0;
+    left: -300px;
+    bottom: 0;
+    z-index: 1;
+    width: 300px; /* 300px original */
+    color: #364149;
+    background: #fafafa;
+    border-right: 1px solid rgba(0,0,0,.07);
+    -webkit-transition: left 250ms ease;
+    -moz-transition: left 250ms ease;
+    -o-transition: left 250ms ease;
+    transition: left 250ms ease;
+}
