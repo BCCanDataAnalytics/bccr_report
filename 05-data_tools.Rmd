@@ -14,16 +14,16 @@ The app is live [here](https://bccandataanalytics.shinyapps.io/IncidenceCounts/)
 
 There are three interactive dashboards available that provide detailed summary information on the distribution of stage of diagnosis and age-standardized incidence rates by sex and age at. Each of the three dashboards provides information for breast, cervix and colorectal cancers -- three cancer types in which BC Cancer operates organized cancer screening programs -- as well as for prostate cancer.
 
-[![](images/BC%20Stage%20dashboard%20report.png "Cancer Stage Dashboards")](http://www.bccancer.bc.ca/statistics-and-reports-site/Documents/Cancer_stage_distribution_20191231.aspx)
+[![](images/BC%20Stage%20dashboard%20report.png "Cancer Stage Dashboards")](http://www.bccancer.bc.ca/health-info/disease-system-statistics/other-reports)
 
 ## Cancer projections data tables
 
 This data table includes information on projected cancer incidence and between 2017 and 2032. Information is available by cancer site, sex and age group as well as various levels of geography. Data can be downloaded for further use.
 
-[![](images/screen%20shot%20data%20table.png "Cancer incidence projections")](http://www.bccancer.bc.ca/statistics-and-reports-site/Documents/Incidence_projections_report_by_LHA_20221205.aspx)
+[![](images/screen%20shot%20data%20table.png "Cancer incidence projections")](http://www.bccancer.bc.ca/health-info/disease-system-statistics/other-reports)
 
 ## BC Cancer Tableau dashboard
 
-In addition to the BC Cancer Statistics Online Dashboard, public health professionals affiliated with the Population Health Observatory can use the Tableau dashboard for an interactive and detailed summary of  cancer incidence and mortality in BC since 1992 by sex, age cancer types and geography. 
+In addition to the BC Cancer Statistics Online Dashboard, public health professionals affiliated with the Population Health Observatory can use the Tableau dashboard for an interactive and detailed summary of cancer incidence and mortality in BC since 1992 by sex, age cancer types and geography.
 
 The dashboard is only available to researchers and health professionals upon request to [datareq\@bccancer.bc.ca](mailto:datareq@bccancer.bc.ca){.email}.
