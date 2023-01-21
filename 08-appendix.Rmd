@@ -1,0 +1,78 @@
+# Appendix I: Methodology For special focus section
+```{r, include = F, warning = F, echo = F}
+library(tidyverse)
+```
+
+## Data sources
+
+### Cancer incidence
+
+New cancer cases (incidence) were obtained from the BC Cancer Registry for diagnoses between 1970 and 2018 (the most recent data available at the time of analysis). The BC Cancer Registry is a person-oriented database that includes diagnosis and demographic information on BC residents diagnosed with cancer.
+
+When compiling counts of new cancer cases we only include invasive cancers (except in-situ bladder which is also included); we exclude most non-melanoma skin cancers (basal and squamous cell carcinomas of the skin) as these are not comprehensively registered in Canada. Cancer site definitions are described in Appendix II: Other Materials.
+
+### Cancer mortality
+
+The BC Cancer Registry receives regular death notifications from the BC Vital Statistics Agency to enable the calculation of cancer survival, mortality and prevalence statistics. Although the Registry receives notifications for all deaths that occur within British Columbia, there is currently no mechanism to report deaths that occur either out of province or outside of Canada. The BCCR used to receive notifications of deaths occurring in cancer patients from other Canadian jurisdictions through a data linkage with the National Mortality Database held at Statistics Canada; this process however has been suspended pending the re-development of a national linkage process. The last time a linkage to ascertain deaths that occurred in other Canadian provinces was performed, it included deaths only up to the end of 2010.
+
+### Population statistics
+
+Population statistics used to generate the cancer incidence rates in this report were derived from BC Stats @BCStats (PEOPLE version 2019). These data were compiled by health authority and provincially and used accordingly in the calculation of cancer incidence rates.
+
+## Analysis
+
+### Age-standardized rates
+
+Cancer records from the BC Cancer Registry were classified by year of diagnosis or death and by sex, age and cancer type. Age was categorized into 19 five-year age groups (i.e. 0-4, 5-9... 90+ years). In some cases, cancer types were further broken down by histological site, topographic site, or health authority region of residence at diagnosis. Rates for each category were calculated by dividing the number of cases or deaths in each category (i.e. sex, age group, year, and cancer type), by the corresponding population estimate.
+
+Age-standardized rates were calculated using the direct method, by weighting the age-specific rates for each five-year age group according to the age distribution of the 2011 Canadian standard population  (Table \@ref(tab:std1)). Age-standardized rate calculations were performed using JoinPoint Regression program.
+
+```{r std1, echo=FALSE, message=FALSE, warning = F, out.width = '100%'}
+a <- tribble(
+     ~Age.Group, ~Population,  ~Weight,
+    "0-4 years",     1899064, 0.055297,
+    "5-9 years",     1810433, 0.052717,
+  "10-14 years",     1918164, 0.055853,
+  "15-19 years",     2238952, 0.065194,
+  "20-24 years",     2354354, 0.068555,
+  "25-29 years",     2369841, 0.069006,
+  "30-34 years",     2327955, 0.067786,
+  "35-39 years",     2273087, 0.066188,
+  "40-44 years",     2385918, 0.069474,
+  "45-49 years",     2719909, 0.079199,
+  "50-54 years",     2691260, 0.078365,
+  "55-59 years",     2353090, 0.068518,
+  "60-64 years",     2050443, 0.059705,
+  "65-69 years",     1532940, 0.044636,
+  "70-74 years",     1153822, 0.033597,
+  "75-79 years",      919338, 0.026769,
+  "80-84 years",      701140, 0.020416,
+  "85-89 years",      426739, 0.012426,
+    "90+ years",      216331, 0.006299,
+        "Total",    34342780,        1
+  ) 
+
+a %>% rename("Age Group" = "Age.Group") %>% kable(
+  caption ='The 2011 Canadian Standard Population.'
+) %>% kable_styling()
+```
+
+### Average annual percent change
+
+The Average Annual Percent Change (AAPC) describes, on average, how much the trend changed year to year over a given period of interest. In this report, we focused on the AAPC from the last ten years of data to express how cancer rates were changing over a recent period. The AAPC was calculated using [Joinpoint trend analysis software](https://surveillance.cancer.gov/joinpoint/){target="_blank"} (version 4.7.0.0) developed and released by the National Cancer Institute @NationalCancerInstitutea.
+
+The Joinpoint analysis was applied to annual age-standardized rates to determine the AAPC for the entire period of analysis (1970-2018) and last ten years of data (2009-2018). The Joinpoint analysis also determined statistically important change points over the entire period of analysis (1970-2018). The same analytical parameters were chosen when using the Joinpoint program as those used to report statistics in the annual Canadian Cancer Statistics publication @CanadianCancerStatisticsAdvisoryCommittee2019. The minimum time span on which to report a trend was set at five years. Therefore, the most recent possible trend in this report was 2014 to 2018. A maximum of five joinpoints were allowed over the entire period of analysis. An uncorrelated error model was selected and the permutation test was used for the model selection.
+
+## Bookdown and R packages
+
+We would like to acknowledge the many great R packages used to publish this report.
+
+-   All analyses used the R statistical language (version 4.0.2) within [R Studio](https://rstudio.com/){target="_blank"} version 1.4.869.
+
+-   This report was published using [bookdown](https://bookdown.org/){target="_blank"}
+
+-   Data wrangling were completed using [tidyverse](https://www.tidyverse.org/){target="_blank"}
+
+-   Interactive plotting and tables were created using [plotly](https://plotly.com/r/){target="blank"} and [DT](https://rstudio.github.io/DT/){target="_blank"}
+
+[![](images/hex/RStudio_hex.png "RStudio"){width="100"}![](images/hex/tidyverse_hex.png "tidyverse"){width="100"}![](images/hex/bookdown_hex.png "bookdown"){width="100"}](https://rstudio.com/){target="_blank"}

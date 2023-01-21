@@ -1,0 +1,21 @@
+# Registry operations update
+
+## NAACCR Gold Certified Registry
+
+The BC Cancer Registry received gold certification status from the North American Association of Central Cancer Registries (NAACCR) for the first time in almost 20 years of data evaluations in the 2012 diagnosis data year. The Registry has received gold certification status every diagnosis year between 2012 and 2018. NAACCR is an independent body located in the United States that evaluates the quality and completeness of data for central cancer registries across the US and Canada. In December 2020, we submitted our 2018 cancer incidence data to NAACCR for data evaluation.
+
+## Challenges in capturing all cases of cancer in BC
+
+Maintaining a high case-capture rate for the cancer registry has been a consistent challenge for several years. Despite NAACCR gold status, the BC Cancer Registry case capture rate is below many other Canadian provinces. A key contributor to this challenge is the increasing number of cancer cases in BC driven by population aging and growth. With the number of cases increasing, there is an increasing workload for the Registry Operations team to process, verify and abstract the information required to complete registration of every cancer in British Columbia.
+
+## Modernizing approaches to cancer registration
+
+A major reason the Registry has been successful in improving case-capture in recent years has been the consistent support from the BC Ministry of Health, which has facilitated greater access to information about patients hospitalized in the province for cancer. However, the steady rise in the number of cancers has required the Registry to explore innovative approaches to case-capture including: computer-assisted coding and; work in consolidating information from multiple data sources.
+
+### Computer-assisted coding and eMaRC
+
+Tumour coding is a highly specialized skill requiring knowledge of medical terminology, disease processes, and coding rules and relies on manual inspection and information abstraction. Advances in computer-assisted coding have shown promise in improving coding efficiencies and accuracy. To leverage the benefits of such coding technology, this year the Registry implemented a text mining solution developed and used by the US Centre for Disease Control (called ["eMaRC"](https://www.cdc.gov/cancer/npcr/tools/registryplus/mp.htm){target="_blank"}) that assists in the identification and abstraction of information from cancer pathology reports.
+
+### Work in consolidating various data sources
+
+The Registry has further collaborated with clinical and health information experts to develop a case-finding algorithm that examines routinely collected data from various health information databases to identity potential tumours for further review. By collecting and comparing information from numerous data sources, the Registry is better positioned to collect better quality data on all cancers in BC.

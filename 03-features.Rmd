@@ -1,0 +1,91 @@
+# Research features
+
+## HPV FOCAL Trial and the path to the elimination of cervical cancer
+
+*Laurie Smith, Research Program Manager, Global Control HPV Related Diseases/HPV FOCAL*
+
+*Andrew Coldman, Emeritus Scientist, BC Cancer*
+
+*Gina Ogilvie, Affiliated Scientist, BC Cancer Tier 1 Canada Research Chair, Global control of HPV related cancer; Professor, School of Population and Public Health, University of British Columbia; Assistant Director, Women's Health Research Institute; Senior Public health Scientist, BC Centre for Disease Control*
+
+Cervical Cancer screening using conventional cytology (the Pap smear) has successfully been conducted for over 50 years in British Columbia.  Cytology (the Pap smear) involves collection of a sample of cervical cells via a speculum exam from a health care provider, after which the sample undergoes microscopic examination at a laboratory. Although the Pap smear has been very successful in reducing morbidity and mortality associated with cervical cancer, it has limitations.  Firstly, the test is subjective and requires exacting interpretation by technologists and pathologists which can result in inconsistency and requires a great deal of infrastructure and training.  Secondly, some types of cervical cancers are less able to be detected and prevented by cytology, even in the best circumstances; as a result, screening with cytology will not prevent all cervical cancers.  Thirdly, due to lowered sensitivity, cytology testing must be done frequently and regularly throughout much of a woman's life in order to be successful.
+
+It is now well established that persistent infection with specific types (high-risk) of the Human Papillomavirus (HPV) is necessary for the development of cervical cancer.  Safe and effective vaccines that protect against HPV have been available in BC for over a decade and offer great promise for the long-term prevention of cervical cancer. However, HPV vaccines do not protect against all types of oncogenic HPV, as a result, screening will be required in cervical cancer prevention for the foreseeable future.  Testing for the presence of HPV is a more sensitive than cytology and offers the opportunity to improve cervix cancer screening and cervical cancer prevention.
+
+The HPV FOCAL Trial was a longitudinal randomized controlled trial evaluating different approaches to cervical cancer screening. Metro Vancouver and Greater Victoria women were recruited from 2008 through May 2012, with exit samples being received through 2016. The study compared cytology (liquid-based) every two years to HPV testing every 4 years.  In the HPV FOCAL Trial, collection of the sample required the usual pelvic examination conducted by a clinician.  After collection, specimens were sent to the provincial laboratory where they were tested by cytology or for HPV.  Over 25,000 women consented to participate in HPV FOCAL. Women were recruited through collaborating health care providers who conducted initial screening and any required follow-up.  The conduct of the study required that data be drawn two principal sources: the BC Cervix Screening Program and the BC Cancer Registry.  The Screening Program was used to identify women eligible for the study and their screening outcomes while the Cancer Registry was used to identify women who developed cervical cancer. 
+
+Among FOCAL trial participants, the use of HPV testing compared to cytology testing resulted in significantly lower likelihood of high-grade cervical dysplasia at 48 months @Ogilvie2018. In addition, HPV testing identified pre-cervical cancer earlier than cytology testing allowing for earlier treatment and prevention of invasive cervical cancer. Further long term evaluations of the protection of HPV testing through the FOCAL trial are currently underway.
+
+### Related publications and links:
+
+-   Ogilvie G, van Niekerk D, Krajden M et al. Effect of Screening with Primary Cervical HPV Testing vs. Cytology Testing on High-Grade Cervical Intraepithelial Neoplasia at 48 months: The HPV FOCAL Randomized clinical Trial. JAMA. 2018;320(1):43-52. [doi:10.1001/jama.2018.7464](https://jamanetwork.com/journals/jama/fullarticle/2686793){target="_blank"}
+
+-   [HPV FOCAL Study, BC Cancer landing page](http://www.bccancer.bc.ca/health-professionals/clinical-trials/hpv-focal-study){target="_blank"}
+
+-   [HPV FOCAL Study, BC Cancer Research Centre landing page](https://www.bccrc.ca/dept/ccr/projects/hpv-focal-study){target="_blank"}
+
+-   [HPV FOCAL Study, Global Control of HPV Related Diseases and Cancer landing page](https://www.globalhpvcontrol.org/hpv-focal-trial){target="_blank"}
+
+## CanIMPACT: A multi-province research study on the role of the family physician in care of cancer patients throughout the cancer journey
+
+*Mary McBride, Distinguished Scientist, BC Cancer;\
+Clinical professor, University of British Columbia, Canadian Centre for Applied Research in Cancer Control.*
+
+To better understand issues around coordination and integration of community-based primary care for cancer patients in Canada, a multidisciplinary group of primary care physicians, nurses, oncology physicians, researchers, knowledge users, and patients came together to form the "Canadian Team to Improve Community-Based Cancer Care along the Continuum (CanIMPACT)", funded by the Canadian Institute of Health Research.  The team's goal was to enhance the capacity of primary care to provide care to cancer patients in Canada, and improve integration, communication, and coordination of care along the cancer care continuum.
+
+The work has been conducted in three Canadian provinces (British Columbia, Manitoba, and Ontario), and consisted of provincial analyses of data for all women with incident invasive breast cancer in each province from 2007 to 2012 (2011 in Manitoba), and followed to end 2012 (2011 in BC).
+
+The first phase of this research program aimed to utilize linked cancer registry, clinical, and health administrative datasets to describe current patterns of primary care physician (PCP) visits among women with breast cancer in the pre-diagnosis, treatment, and post-treatment follow-up phases of care. As well, the provincial teams have examined clinical and health system factors affecting these patterns, and access to care for some specific vulnerable subgroups (older women; those of low socioeconomic status; those living in rural areas; and immigrant populations). An initial report of CanIMPACT activities is published in a special issue of Canadian Family Physician @Jiang2016.
+
+Initial findings have indicated that PCPs are playing a key role with patients in all phases of cancer care, although there is variation across provinces. In all provinces, more than three-quarters of patients visited their PCP at least twice during the breast cancer diagnostic period. As expected, PCPs were least involved during the treatment phase, however, post-treatment (from two to five years post-diagnosis for those with curative treatment), there was an increase in number of PCP visits and continuity of care (measured as the proportion of visits to a single provider) compared with the pre-diagnosis period in all provinces, but a decreasing number of PCP visits from year 2 to year 5 post-diagnosis.  BC reported less oncology involvement/share care, and more PCP involvement, in this post-treatment stage.
+
+Since PCPs have a lead role in both pre-diagnosis and survivor follow-up, the provincially-based teams are currently focusing on these two phases in further analyses, examining an array of drivers of variation in care in the diagnosis and survivor care phases, as well as adherence to patient follow-up guidelines.
+
+### Related publications and links:
+
+-   Winget M, Yuan Y, McBride ML, Kendell C, Decker KM, Grunfeld E, Groome P for the Canadian Team to Improve Community-Based Cancer Care Along the Continuum (CanIMPACT). Inter- and intra-provincial variation in screen-detected breast cancer across five Canadian provinces: a CanIMPACT study. *Can J Public Health*. 2020. (<https://doi.org/10.17269/s41997-019-00282-5>){target="\_blank"}
+
+-   [CanIMPACT landing page](https://canimpact.utoronto.ca/){target="_blank"}
+
+<!-- ## Cancer in BC First Nations People -->
+
+<!-- *Kevin Linn* -->
+
+<!-- *Warren Claremont* -->
+
+<!-- *Nadine Caron* -->
+
+<!-- ### Related publications and links -->
+
+<!-- -   McGahan CE, Linn K, Guno P, Johnson H, Coldman AJ, Spinelli JJ, Caron NR. Cancer in First Nations people living in British Columbia, Canada: an analysis of incidence and survival from 1993 to 2010. Cancer Causes Control. 2017 Oct;28(10):1105-1116. [doi: 10.1007/s10552-017-0950-7](https://link.springer.com/article/10.1007/s10552-017-0950-7){target="_blank"}. Epub 2017 Sep 8. PMID: 28887646. -->
+
+<!-- -   [Improving indingeous Cnacer Journeys in BC: A road map](https://www.fnha.ca/WellnessSite/WellnessDocuments/improving-indigenous-cancer-journeys-in-bc.pdf){target="_blank"} -->
+
+<!-- -   [Indigenous cancer Control, BC Cancer landing page](http://www.bccancer.bc.ca/our-services/services/indigenous-cancer-control){target="_blank"}, -->
+
+<!-- -   [First Nations Health Authority](https://www.fnha.ca/){target="_blank"} -->
+
+<!-- -   [Métis Nation BC](https://www.mnbc.ca/){target="_blank"} -->
+
+<!-- -   [BC Association of Aboriginal Friendship Centres](https://bcaafc.com/){target="_blank"} -->
+
+## International cancer outcomes benchmarking study
+
+*Ryan Woods, Director of Data & Analytics and Scientist, Cancer Control Research, BC Cancer;* *Assistant Professor, Faculty of Health Sciences, Simon Fraser University.*
+
+**Benchmarking Cancer Survival across High-income Countries: The International Cancer Benchmarking Partnership (ICBP) SURVMARK-2 Study**
+
+Data from the BC Cancer Registry supported the inclusion of BC in a recent international cancer outcomes study led by a team at the International Agency for Research on Cancer at the World Health Organization. This study compared cancer survival from eight cancers across 21 jurisdictions in 7 high-income countries with both high-quality cancer registry data and where patients have universal access to healthcare; in total data from approximately 4 million cancer patients were included in the study analyses.
+
+Findings confirmed that cancer patient outcomes in BC, and Canada in general, are strong and comparable to other high performing countries within the study. By working collaboratively to benchmark cancer outcomes under a single study protocol, jurisdictions can obtain estimates that are comparable and ideally more reflective of true differences in outcomes. This is because the data are prepared identically in each jurisdiction, are subject to similar data quality control procedures, and the analysis is done by a single team using a standardized analytic approach. Results from the first summary paper were recently published in the journal Lancet Oncology with results from several associated sub-studies appearing in high impact journals such as *Gut*, *International Journal of Cancer*, *Cancer Epidemiology* and others. Follow-up work to assess variation in routes to diagnosis and the extent to which this variation contributes to variation in cancer outcomes has been undertaken and will appear in *Lancet Oncology* in 2022.
+
+**Canadian regional and international survival changes in *lung cancer*, 1995-1999 to 2010-2014.**
+
+<a href="https://www.cancerresearchuk.org/health-professional/data-and-statistics/international-cancer-benchmarking-partnership-icbp" target="_blank">![Lung cancer net survival has improved 7.6% over the past 15 years in BC, slightly more than the average Canadian increase of 6.3%.](images/Lung%20cancer%20ICBP.png "Lung cancer net survival has improved 7.6% over the past 15 years in BC, slightly more than the average Canadian increase of 6.3%."){align="center" style="margin: 0 1em 0 1em" width="580"}</a>
+
+*As shown above, lung cancer net survival has improved 7.6% over the past 15 years in BC, slightly more than the average Canadian increase of 6.3%.*
+
+### Related links and publications
+
+-   [International Cancer Benchmarking Partnership (ICBP), Cancer Research UK landing page](https://www.cancerresearchuk.org/health-professional/data-and-statistics/international-cancer-benchmarking-partnership-icbp){target="_blank"}
+-   Arnold, M., Rutherford, M. J., Bardot, A., Ferlay, J., Andersson, T. M., Myklebust, T. Å., Tervonen, H., Thursfield, V., Ransom, D., Shack, L., Woods, R. R., Turner, D., Leonfellner, S., Ryan, S., Saint-Jacques, N., De, P., McClure, C., Ramanakumar, A. V., Stuart-Panko, H., Engholm, G., ... Bray, F. (2019). Progress in cancer survival, mortality, and incidence in seven high-income countries 1995-2014 (ICBP SURVMARK-2): a population-based study. The Lancet. Oncology, 20(11), 1493--1505. [https://doi.org/10.1016/S1470-2045(19)30456-5](https://www.sciencedirect.com/science/article/pii/S1470204519304565?via%3Dihub){target="_blank"}

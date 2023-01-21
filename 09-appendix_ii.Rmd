@@ -1,0 +1,123 @@
+# Appendix II: Other materials
+```{r, include = F, warning = F, echo = F}
+library(tidyverse)
+```
+
+## Abbreviations
+
+```{r abbr, echo=FALSE, message=FALSE, warning = F, out.width = '100%'}
+x <- tribble(
+  ~col1, ~col2,
+"AAPC",  "Annual average percent change",
+"AC",  "Adenocarcinoma",
+"APC",  "Annual percent change",
+"BC",  "British Columbia",
+"BCC",  "BC Cancer",
+"BCCR",  "British Columbia Cancer Registry",
+"CanIMPACT",  "Canadian Team to Improve Community Based Cancer Care Along the Continuum",
+"CBPHC",  "Community-based primary health care",
+"HPV FOCAL",  "HPV for Cervical Cancer (FOCAL) Trial",
+"HPV",  "Human Papilloma Virus",
+"MOH",  "Ministry of Health",
+"NAACCR",  "North American Association of the Central Cancer Registries",
+"PBDE",  "Polybrominated diphenyl ethers",
+"PHSA",  "Provincial Health Services Authority",
+"PSA",  "Prostate specific antigen",
+"SC",  "Squamous cell",
+"SEER",  "Surveillance, Epidemiology and End Results",
+"UK",  "United Kingdom",
+"US",  "United States",
+"WHO",  "World Health Organization"
+) %>% 
+  kable(format = "html") %>% 
+  kable_styling(bootstrap_options = c("striped", "hover", "condensed", "responsive"))
+
+gsub("<thead>.*</thead>", "", x)
+```
+
+## Glossary
+
+**Average Annual Percent Change (AAPC)**
+
+The AAPC is a summary measure presented as a percent that describes, on average, how much the trend in incidence rates changed year to year over a given period of interest.
+
+**Cancer Incidence**
+
+The number of new cases of a given type of cancer diagnosed in a specified time period. The basic unit of reporting is a new case of cancer rather than an individual patient.
+
+**Cancer Incidence Rate**
+
+The number of new cases of a given type of cancer per person in the general population (usually expressed as a rate per 100,000 people).
+
+**Cancer** **Mortality**
+
+The number of deaths attributed to a particular type of cancer in a given time period.  Included are deaths of patients diagnosed in earlier years, persons with a new diagnosis during the year who died, and patients for whom a diagnosis of cancer is made only after death.
+
+**Cancer Mortality Rate**
+
+The number of new deaths of a given type of cancer per person in the general population (usually expressed as a rate per 100,000 people).
+
+**Trends**
+
+The change in the rate of new cancer cases or deaths in the population over time.
+
+## Cancer site definitions
+
+Table \@ref(tab:cancer) below provides the specific definitions used for the various cancers reported within this report. The definitions for each cancer are based on the ICDO-3 site (topography) and histology (morphology) codes and are provided in the right-hand column of Table A2. In this report we include invasive cancers only with the exception of bladder cancer which includes both invasive and in situ cases.
+
+```{r cancer, echo=FALSE, message=FALSE, warning = F, out.width = '100%'}
+  tribble(
+  ~`Cancer`, ~`ICD-O-3 Site/Type (incidence)`,
+"Bladder (including in situ)",	"C67",
+"Body of Uterus",	"C54-C55", 
+"Brain",	"C70-C72",
+"Breast",	"C50", 
+"Cervix",	"C53",
+"Colorectal",	"C18-C20, C26.0", 
+"Esophagus",	"C15", 
+"Kidney",	"C64.9, C65.9", 
+"Hodgkin Lymphoma",	"Type 9650-9667",
+"Larynx",	"C32",
+"Leukemia",	"Type 9733, 9742, 9800-9801, 9805-9809, 9820, 9826, 9831-9836, 9840, 9860-9861, 9863, 9865-9867, 9869-9876, 9891, 9895-9898, 9910, 9911, 9920, 9930-9931, 9940, 9945-9946, 9948, 9963-9964 
+Type 9811-9818, 9823, 9827, 9837 sites C42.0,.1,.4", 
+"Liver"	,"C22",
+"Lung",	"C34", 
+"Melanoma", "C44 (Type 8720-8790)" ,
+"Multiple Myeloma",	"Type 9731-9732, 9734",
+"Non-Hodgkin Lymphoma",	"Type 9590-9597, 9670-9719, 9724-9729, 9735, 9737, 9738 
+Type 9811-9818, 9823, 9827, 9837 all sites except C42.0,.1,.4", 
+"Oral",	"C00-C14",
+"Ovary",	"C56.9", 
+"Pancreas",	"C25", 
+"Prostate",	"C61.9", 
+"Stomach",	"C16",
+"Thyroid",	"C73.9", 
+"All Other Cancers",	"All other cancer types not identified above",
+"All Cancers",	"All invasive sites (including in situ bladder)"
+) %>% kable(format = "html",
+              caption ='Cancer groupings and site definitions.'
+) %>% 
+  kable_styling(bootstrap_options = c("striped", "hover", "condensed", "responsive"))
+
+```
+
+Non-melanoma skin cancers are not including in any of the above cancer types as these are not routinely registered in Canada at this time.
+
+ICD-O-3 refers to the International Classification of Diseases for Oncology, Third Edition and ICD-10 refers to the International Statistical Classification of Diseases and Related Health Problems, Tenth Revision.
+
+For more information about site groupings used in this report, please contact the BC Cancer Registry using the contact information provided in this report.
+
+## Acknowledgements
+
+The BC Cancer Registry would like to acknowledge the commitment of the many health care professionals who continue to provide active support to the Registry. We would also like to acknowledge the Vital Statistics Agency of British Columbia for their ongoing support in providing mortality information to the BC Cancer Registry. We would further like to acknowledge the BC Ministry of Health for their support in coordinating access to cancer patient information to support improved cancer registration in our province.
+
+## Contact information
+
+If you would like more information about the BC Cancer Registry and any of our activities, please feel free to contact us. Additionally, if you have any questions or feedback on this report we would be happy to hear from you.
+
+Jonathan Simkin \
+Scientific Director, BC Cancer Registry \
+BC Cancer \
+Provincial Health Services Authority \
+2nd floor 601 W Broadway Vancouver, BC V5Z 4C2, Canada \
+Email: [datareq\@bccancer.bc.ca](mailto:datareq@bccancer.bc.ca){.email}

@@ -1,0 +1,925 @@
+# Special focus: trends in cancer incidence
+
+```{r, include = F, warning = F, echo = F}
+library(tidyverse)
+# library(ggiraph)
+library(plotly)
+library(magrittr)
+library(grid)
+library(gridExtra)
+library(kableExtra)
+library(viridis)
+library(viridisLite)
+
+theme_set(theme_bw(base_size = 12) + 
+            theme(
+              panel.grid.major.x = element_blank(), 
+              panel.grid.minor.x = element_blank(), 
+              panel.grid.minor.y = element_blank(),
+              axis.title.x = element_text(face = "bold"), 
+              axis.title.y = element_text(face = "bold"),
+              axis.text.x = element_text(angle = 0),
+              legend.position = "bottom"))
+options(kableExtra.html.bsTable = T)
+```
+
+*Is cancer becoming more common in our population?* This is a question cancer epidemiologists are often asked and the answer is complicated. Part of the challenge is that cancer is a term used for a constellation of possibly hundreds of different diseases which, despite being grouped under this common term, can be caused by very different factors and manifest in different ways. Some of these different diseases or "cancer types" are in fact becoming more common in our population, while others have been successfully reduced through various cancer control efforts.
+
+For this special report, we wanted to provide a picture of recent trends in cancer incidence. As noted above, because cancers are caused by a number of different risk factors, the trends in cancer incidence are not the same across cancer types. We have chosen to focus this report on
+
+-   Patterns for cancers that represent the largest cancer burden in BC and,
+-   Patterns where we have seen strong changes in cancer risk (rates changing by an average of more than 2% per year) in recent years.
+
+Thus, we present a series of discussions on notable patterns, organized into three groups: the 'big four' cancer sites (i.e. breast, prostate, colorectal and lung cancers); select cancers with notable trends in recent years; and those with trends which are only revealed when we examine a specific group within the population (e.g. a specific age group).
+
+More information on cancer trends in BC, including cancer incidence and mortality statistics, visit the [BC Cancer Disease and System Statistics website](http://www.bccancer.bc.ca/health-info/disease-system-statistics){target="_blank"}.
+
+<!-- ## Why do we look at trends in cancer incidence? -->
+## Why examine incidence trends?
+
+Examining trends in cancer incidence rates provides key information for cancer control. Firstly, identifying which cancers are becoming more or less common in our population can help determine future service demands for our province for planning purposes. Cancer incidence projections are produced by many agencies in Canada each year and are derived from an analysis of trends in cancer incidence rates, as well as expected population changes into the future. BC Cancer produces these [projections annually](http://www.bccancer.bc.ca/health-info/disease-system-statistics/number-of-new-cancer-diagnoses-prevalence){target="_blank"} for the BC population and disseminates these on our website to assist partners in planning for cancer service demands.
+
+Second, examining incidence rate patterns can help us evaluate our prevention efforts from the past. For example, cancers with known risk factors, which have been the focus of public health and cancer prevention efforts, will hopefully show decreasing trends over time following these efforts. Some cancer control programs, such as cervical cancer screening, have successfully reduced cancer incidence in our province by identifying lesions in pre-cancerous states where they can be treated most effectively. An examination of cancer incidence trends for cervical cancer in BC between 1970 and 2018 supports this claim showing a strong decreasing trend from the 1970's, shortly after the provincial screening program began (Figure \@ref(fig:figure12)).
+
+<!-- *Interactive Version 1 (plotly package, hovertemplate unified)* -->
+
+```{r figure12, echo=FALSE, warning = FALSE, fig.cap='Trends in cervical incidence and mortality in British Columbia, 1970-2018.', out.width = '100%'}
+
+read.csv("Analysis/data_for_bookdown/df_fig_1v2.csv") %>% 
+  pivot_longer(
+    cols = c("ASIR", "ASMR"),
+    names_to = "inc_mort_type",
+    values_to = "ASR"
+  ) %>% 
+  mutate(inc_mort_type = case_when(inc_mort_type == "ASIR" ~ "Incidence", T ~ "Mortality")) %>% 
+  plot_ly(data = ., 
+        x = ~year, 
+        y = ~ASR, 
+        type = "scatter",
+        text = ~year,
+        mode = "lines+markers",
+        color = ~inc_mort_type,
+        colors = c("#2B8CBE", "#810F7C"),
+        hovertemplate = paste(
+      # "<b>%{text}</b><br>",
+      "%{yaxis.title.text}: %{y:.1f}<br>",
+      "<extra></extra>"
+      )) %>%
+  layout(
+         xaxis = list(title = 'Year',
+                      showgrid = T),
+         yaxis = list (title = 'Age-Standardized Rate<br>(per 100,000 persons)',
+                       showgrid = T,
+                       hoverformat = '.1f',
+                       range = c(0, 20)),
+         legend = list(orientation = "h",   # show entries horizontally
+                     xanchor = "center",  # use center of legend as anchor
+                     x = 0.5,
+                      y = -0.2),
+         hovermode = "x") %>%
+  config(
+         # save to desired format
+         toImageButtonOptions = list(
+          format = "png",
+          width = 1200,
+          height = 800
+         ))
+
+```
+
+Third, trends can point us towards areas where further prevention efforts are needed. Increasing trends in known cancer risk factors that show corresponding increases in cancer incidence rates may suggest important areas for public health intervention and cancer control strategies, such as improving public awareness of obesity as a cancer risk factor.
+
+Finally, examining cancer incidence trends may suggest areas of importance for research into a wide array of questions including those relating to causes of cancer, prevention interventions, or the impact of the observed changes in cancer patterns. Overall, cancer incidence trends are useful for assessment of past programs and establishment of priority areas for the future.
+
+## How do we assess cancer trends?
+
+To examine trends in cancer incidence, we principally use cancer incidence rates (i.e. rates of new cases of cancer) as our statistic rather than incidence counts (i.e. counts of new cases of cancer). Cancer rates quantify the risk of cancer in the population, usually reported for a fixed number of people at risk, for example *cancer cases per 100,000 persons*. Rates therefore take into account changes in the population size over time. We further tend to use *age-standardized* incidence rates to examine trends in cancer risk; age-standardization removes the effect of changes that might occur in the age distribution of the population over time (Figure \@ref(fig:figure21)). Older populations tend to be diagnosed with more cancers and therefore, by examining trends in age-standardized incidence rates, we can study how the cancer risk is changing in the population with the effects of a growing and aging population removed.
+
+<!-- *interactive Version* -->
+
+```{r figure21, echo=FALSE, warning = F, fig.cap='Trends in the age-standardized incidence rates and counts of new cases for all cancers over time by sex, British Columbia, 1970-2018.', out.width = '100%', fig.height = 8}
+df_fig_2 <-
+read.csv("Analysis/data_for_bookdown/df_fig_2v2.csv")
+
+a <-
+plot_ly(data = df_fig_2 %>% filter(sex == "Females"), 
+        x = ~year, 
+        y = ~ASIR, 
+        text = ~year,
+        name = "Female Rate",
+        type = "scatter",
+        mode = "lines",
+        line = list(color = c("#15455e")),
+        hovertemplate = paste(
+      # "<b>%{text}</b><br>",
+      "%{yaxis.title.text}: %{y:.1f}"
+      # "<extra></extra>"
+      )) %>%
+  add_trace(x = ~year, 
+        y = ~inc_counts, 
+        text = ~year,
+        type = "bar",
+        name = "Female Counts",
+        yaxis = "y2",
+        marker = list(color = c("#15455e80")),
+        hovertemplate = paste(
+      # "<b>%{text}</b><br>",
+      "%{yaxis.title.text}: %{y:}<br>"
+      # "<extra></extra>"
+      )) %>% 
+  layout(
+         xaxis = list(title = 'Year',
+                      titlefont = list(color = "black"),
+                      showgrid = F),
+         yaxis = list (side = 'left', title = 'Age-Standardized Rate<br>(per 100,000 persons)',
+                       showgrid = T,
+                       titlefont = list(color = "white"),
+                       hoverformat = '.1f',
+                       range = c(0, 800)),
+         yaxis2 = list(side = 'right', overlaying = "y", title = 'Number of New Cases', showgrid = F, zeroline = FALSE,
+                       hoverformat = '.0f',
+                       titlefont = list(color = "white"),
+                       range = c(0, 25000),
+                        tickformat=",d",
+                       automargin = T),
+         legend = list(orientation = "h",   # show entries horizontally
+                     xanchor = "center",  # use center of legend as anchor
+                     x = 0.5,
+                      y = -0.2),
+         # title = list(
+         #  text = "Females",
+         #   x = 0
+         # ),
+         hovermode = "x unified")
+
+b <-
+plot_ly(data = df_fig_2 %>% filter(sex == "Males"), 
+        x = ~year, 
+        xaxis = "x2",
+        y = ~ASIR, 
+        yaxis = "y3",
+        text = ~year,
+        name = "Male Incidence Rate",
+        type = "scatter",
+        mode = "lines",
+        line = list(color = c("#2B8CBE")),
+        hovertemplate = paste(
+      #"<b>%{text}</b><br>",
+      "%{yaxis.title.text}: %{y:.1f}"
+      # "<extra></extra>"
+      )) %>%
+  add_trace(x = ~year, 
+            xaxis = "x2",
+        y = ~inc_counts, 
+        yaxis = "y4",
+        text = ~year,
+        type = "bar",
+        name = "Male Counts",
+        marker = list(color = c("#2B8CBE60")),
+        hovertemplate = paste(
+     # "<b>%{text}</b><br>",
+      "%{yaxis.title.text}: %{y:}<br>",
+      "<extra></extra>"
+      )) %>% 
+  layout(uniformtext=list(minsize=8, mode='hide'),
+         xaxis2 = list(title = 'Year',
+                       titlefont = list(color = "white"),
+                      showgrid = F,
+                      zeroline = T),
+         yaxis3 = list (side = 'left', title = 'Age-Standardized Rate<br>(per 100,000 persons)',
+                         titlefont = list(color = "white"),
+                       showgrid = T,
+                       hoverformat = '.1f',
+                       range = c(0, 800)),
+         yaxis4 = list(side = 'right', overlaying = "y3", title = 'Number of New Cases', showgrid = F, zeroline = FALSE,
+                       hoverformat = '.0f',
+                       titlefont = list(color = "white"),
+                       range = c(0, 25000),
+                        tickformat=",d",
+                       automargin = T),
+         legend = list(orientation = "h",   # show entries horizontally
+                     xanchor = "center",  # use center of legend as anchor
+                     x = 0.5,
+                      y = -0.2),
+         # title = list(
+         #  text = "Males",
+         #   x = 0
+         # ),
+         hovermode = "x")
+
+m <- list(
+  l = 60,
+  r = 60,
+  b = 100,
+  t = 25
+  # pad = 4
+)
+
+subplot(a,b, nrows = 2, shareX = TRUE, shareY = F, titleX = T, titleY = T,
+        margin = 0.065) %>% 
+  layout(
+    xaxis = list(anchor = 'y3'),
+    annotations = list(
+ list(x = 0, y = 1.05, text = "<b>Females</b>", showarrow = F, xref='paper', yref='paper'),
+  list(x = 0 , y = 0.425, text = "<b>Males</b>", showarrow = F, xref='paper', yref='paper'),
+ list(x = -0.11 , y = 0.5, text = "Age-Standardized Rate<br>(per 100,000 persons)",
+                     # font = list(color = "blue",size = 18),
+                     textangle = 270,
+                     showarrow = F, xref='paper', yref='paper', size=12),
+ list(x = 1.105, y = 0.5, text = "Number of New Cases",
+                     # font = list(color = "blue",size = 18),
+                     textangle = 90,
+                     showarrow = F, xref='paper', yref='paper', size=12)),
+ autosize = T,
+                      #width = 500, height = 500,
+                      margin = m) %>%
+  config(
+         # save to desired format
+         toImageButtonOptions = list(
+          format = "png",
+          width = 1000,
+          height = 1000
+         ))
+```
+
+An analysis of cancer trends generally includes the study of graphs of cancer incidence rates over time, by age or sex where applicable. These graphs help depict how much the rates vary over time and whether there is a discernible increasing or decreasing (or both) pattern in the rates. By looking at these patterns by age, sex or even geographic region, one can assess whether there are important differences in the patterns over time according to these factors.
+
+Often trends in cancer incidence rates over a fixed period (e.g. the last ten years) are summarized using two measures called the Annual Percent Change (APC), and the Annual Average Percent Change (AAPC). The AAPC is a summary measure presented as a percent that describes, on average, how much did the trend change year to year over a given period of interest. We have chosen to use the AAPC from the last ten years of data to express recent changes in cancer rates. In interpreting these values we consider rates that are changing by nearly more than 2% per year (increasing or decreasing) to be significant (i.e. an important change). An AAPC that is positive refers to a trend that is increasing, whereas a negative value refers to a trend that is declining. A detailed methods section can be found in [Appendix I][Appendix I: Methodology For Special Focus Section] of this report.
+
+<!-- ## What do we see in BC in terms of cancer trends? -->
+## Cancer trends in BC
+
+### All cancers
+
+If we consider all cancers together, the trends in the age-standardized rates of new cancers in the province have not changed dramatically in BC over the past decade (Figures \@ref(fig:figure31)). The rate for all cancers among males declined slightly in the past decade (2009-2018) by about 0.7% per year; this can be explained in part by a strong recent drop in prostate cancer incidence (see [prostate cancer](#prostate) in the next section). Prostate cancer is the most common cancer among males in Canada.
+
+All cancer rates among females remained stable in the past decade. Despite this, many cancers have shown changes in recent years among BC females. [Breast cancer](#female-breast) for example is the most common cancer among females and has fluctuated in recent years. Cervical cancer shows a strong decline overall and a modest decline in the past decade. [Thyroid] and uterine cancers have increased strongly in the past ten years.
+
+Despite generally stable incidence rates for all cancers over the past decade, the number of new cases of cancer, as indicated by the vertical bars in Figure \@ref(fig:figure21), has increased over time. The increase in the number of new cancers is largely driven by population aging and growth. This observation has also been reported across Canada @CanadianCancerStatisticsAdvisoryCommittee2019. The increase in new cases annually has important implications for cancer care planning.
+
+Figure \@ref(fig:figure31) below shows AAPCs for the most recent ten-year period (from 2009 to 2018) for various cancer types by sex. Bars which are above zero (to the right of the graph) represent cancers that are increasing, with the height of the bar representing the strength of the increasing trend. Conversely, bars below zero (to the lft of the graph) represent cancers with decreasing trends.
+
+<!-- *Interactive version* -->
+
+```{r figure31, echo=FALSE, warning = F, fig.cap='Average annual percentage change in incidence by cancer type and sex, British Columbia, 2009-2018.', out.width = '100%', fig.height= 12}
+plot_df <-
+read.csv("Analysis/data_for_bookdown/df_fig_3v2.csv") %>% 
+  filter(Sex == "Females")
+
+cancer_F_list <- 
+  plot_df %>% 
+    arrange(desc(AAPC)) %$%
+    Cancer
+
+plot_df <-
+  plot_df %>% 
+  mutate(Cancer = factor(Cancer, levels = c(cancer_F_list)))
+
+a <-
+plot_ly(data = plot_df, 
+        x = ~AAPC, 
+        y = ~Cancer, 
+        text = ~Cancer,
+        type = "bar",
+        name = "Female Cancers",
+        marker = list(color = c("#15455e80")),
+        hovertemplate = paste(
+      "<b>%{text}</b>",
+      "%{xaxis.title.text}: %{x:}"
+      # "<extra></extra>"
+      )) %>% 
+  layout(
+         xaxis = list(title = 'Average Annual Percent Change (AAPC) (%)',
+                      titlefont = list(color = "black"),
+                      showgrid = F),
+         yaxis = list (side = 'left', title = '',
+                       showgrid = T,
+                       # titlefont = list(color = "white"),
+                       hoverformat = '.1f'
+                       # range = c(0, 800)
+                       ),
+         legend = list(orientation = "h",   # show entries horizontally
+                     xanchor = "center",  # use center of legend as anchor
+                     x = 0.5,
+                      y = -0.075),
+         # title = list(
+         #  text = "Females",
+         #   x = 0
+         # ),
+         hovermode = "y")
+
+plot_df <-
+read.csv("Analysis/data_for_bookdown/df_fig_3v2.csv") %>% 
+  filter(Sex == "Males")
+
+cancer_F_list <- 
+  plot_df %>% 
+    arrange(desc(AAPC)) %$%
+    Cancer
+
+plot_df <-
+  plot_df %>% 
+  mutate(Cancer = factor(Cancer, levels = c(cancer_F_list)))
+
+b <-
+plot_ly(data = plot_df, 
+        x = ~AAPC, 
+        y = ~Cancer, 
+        text = ~Cancer,
+        type = "bar",
+        name = "Males Cancers",
+        marker = list(color = c("#2B8CBE80")),
+        hovertemplate = paste(
+      "<b>%{text}</b>",
+      "%{xaxis.title.text}: %{x:}"
+      # "<extra></extra>"
+      )) %>% 
+  layout(
+         xaxis = list(title = 'Average Annual Percent Change (AAPC) (%)',
+                      titlefont = list(color = "black"),
+                      showgrid = F),
+         yaxis = list (side = 'left', title = '',
+                       showgrid = T,
+                       # titlefont = list(color = "white"),
+                       hoverformat = '.1f'
+                       # range = c(0, 800)
+                       ),
+         legend = list(orientation = "h",   # show entries horizontally
+                     xanchor = "center",  # use center of legend as anchor
+                     x = 0.5,
+                      y = -0.075),
+         # title = list(
+         #  text = "Females",
+         #   x = 0
+         # ),
+         hovermode = "y")
+
+subplot(a,b, nrows = 2, shareX = TRUE, shareY = F, titleX = T, titleY = T
+        #margin = 0.1
+        ) %>% 
+  layout(
+    # xaxis = list(anchor = 'y3'),
+    annotations = list(
+ list(x = 0, y = 1.025, text = "<b>Females</b>", showarrow = F, xref='paper', yref='paper', font = list(size = 16)),
+  list(x = 0 , y = 0.5, text = "<b>Males</b>", showarrow = F, xref='paper', yref='paper', font = list(size = 16))),
+ autosize = T
+ ) %>%
+  config(
+         # save to desired format
+         toImageButtonOptions = list(
+          format = "png",
+          width = 800,
+          height = 1000
+         ))
+```
+
+## Trends by cancer site
+
+In this section, we discuss the trends for BC's most common four cancers (breast, prostate, lung and colorectal) and further highlight eight cancers that demonstrate strong changes in their cancer rates since 1970. We discuss how trends in BC compare to data published elsewhere and offer some information about what is believed to be contributing to observed changes in cancer rates.
+
+<!-- ### How are the most common cancer changing? -->
+### Most common cancers
+
+```{r figure41, echo=FALSE, warning = F, fig.cap='Trends in cancer incidence for the most common cancers in British Columbia, 1970-2018.', out.width = '100%', out.height = '80%'}
+
+plot_df <-
+read.csv("Analysis/data_for_bookdown/df_fig_4v2.csv")
+
+breast <- 
+plot_df %>%
+  filter(Cancer == "Breast") %>% 
+  plot_ly(.,
+        x = ~Year, 
+        y = ~Model_ASIR, 
+        type = "scatter",
+        text = ~paste0("<b>", Year, "</b>",", ", Sex, "<br>"),
+        mode = "lines",
+        color = ~Sex,
+        colors = c(#"#2B8CBE", 
+                   "#15455e"),
+        hoverinfo = "skip") %>%
+  add_trace(
+    x = ~Year, 
+        y = ~ASIR, 
+        type = "scatter",
+        text = ~paste0("<b>", Year, "</b>",", ", Sex, "<br>"),
+        mode = "markers",
+        color = ~Sex,
+            opacity = 0.5,
+    marker = list(
+      line = list(
+        color = '#000000',
+        width = 0.8
+      )),
+        colors = c(#"#2B8CBE", 
+                   "#15455e"),
+        hovertemplate = paste(
+      "<b>%{text}</b>",
+      "%{yaxis.title.text}: %{y:.1f}"
+      # "<extra></extra>"
+  ),
+  showlegend = F) %>% 
+  layout(
+         xaxis = list(title = 'Year',
+                      showgrid = T),
+         yaxis = list (title = 'Age-Standardized Rate<br>(per 100,000 persons)',
+                                              titlefont = list(color = "white"),
+                       showgrid = T,
+                       hoverformat = '.1f',
+                       zeroline = T,
+                       range = c(0, 220)
+                       ),
+         legend = list(orientation = "h",   # show entries horizontally
+                     xanchor = "center",  # use center of legend as anchor
+                     x = 0.5,
+                      y = -0.2),
+         hovermode = "x unified") 
+
+prostate <- 
+plot_df %>%
+  filter(Cancer == "Prostate") %>% 
+  plot_ly(.,
+        x = ~Year, 
+        y = ~Model_ASIR, 
+        type = "scatter",
+        text = ~paste0("<b>", Year, "</b>",", ", Sex, "<br>"),
+        mode = "lines",
+        color = ~Sex,
+        colors = c("#2B8CBE" 
+                   #"#810F7C"
+                   ),
+        hoverinfo = "skip") %>%
+  add_trace(
+    x = ~Year, 
+        y = ~ASIR, 
+        type = "scatter",
+        text = ~paste0("<b>", Year, "</b>",", ", Sex, "<br>"),
+        mode = "markers",
+        color = ~Sex,
+            opacity = 0.5,
+        colors = c("#2B8CBE" 
+                   #"#810F7C50"
+                   ),
+    marker = list(
+      line = list(
+        color = '#000000',
+        width = 0.8
+      )),
+        hovertemplate = paste(
+      "<b>%{text}</b>",
+      "%{yaxis.title.text}: %{y:.1f}"
+      # "<extra></extra>"
+  ),
+  showlegend = F) %>% 
+  layout(
+         xaxis = list(title = 'Year',
+                      showgrid = T),
+         yaxis = list (title = 'Age-Standardized Rate<br>(per 100,000 persons)',
+                       showgrid = T,
+                       hoverformat = '.1f',
+                       zeroline = T,
+                       range = c(0, 220)
+                       ),
+         # legend = list(orientation = "h",   # show entries horizontally
+         #             xanchor = "center",  # use center of legend as anchor
+         #             x = 0.5,
+         #              y = -0.2),
+         hovermode = "x unified") 
+
+colorectal <- 
+plot_df %>%
+  filter(Cancer == "Colorectal") %>% 
+  plot_ly(.,
+        x = ~Year, 
+        y = ~Model_ASIR, 
+        type = "scatter",
+        text = ~paste0("<b>", Year, "</b>",", ", Sex, "<br>"),
+        mode = "lines",
+        color = ~Sex,
+        colors = c(
+                   "#15455e",
+                   "#2B8CBE"),
+        hoverinfo = "skip",
+  showlegend = F) %>%
+  add_trace(
+    x = ~Year, 
+        y = ~ASIR, 
+        type = "scatter",
+        text = ~paste0("<b>", Year, "</b>",", ", Sex, "<br>"),
+        mode = "markers",
+        color = ~Sex,
+        opacity = 0.5,
+    marker = list(
+      line = list(
+        color = '#000000',
+        width = 0.8
+      )),
+        colors = c(
+                   "#15455e",
+                   "#2B8CBE"),
+        hovertemplate = paste(
+      "<b>%{text}</b>",
+      "%{yaxis.title.text}: %{y:.1f}"
+      # "<extra></extra>"
+  ),
+  showlegend = F) %>% 
+  layout(
+         xaxis = list(title = 'Year',
+                      showgrid = T),
+         yaxis = list (title = 'Age-Standardized Rate<br>(per 100,000 persons)',
+                                              titlefont = list(color = "white"),
+                       showgrid = T,
+                       hoverformat = '.1f',
+                       zeroline = T,
+                       range = c(0, 220)
+                       ),
+         # legend = list(orientation = "h",   # show entries horizontally
+         #             xanchor = "center",  # use center of legend as anchor
+         #             x = 0.5,
+         #              y = -0.2),
+         hovermode = "x unified") 
+
+lung <-
+plot_df %>%
+  filter(Cancer == "Lung") %>% 
+  plot_ly(.,
+        x = ~Year, 
+        y = ~Model_ASIR, 
+        type = "scatter",
+        text = ~paste0("<b>", Year, "</b>",", ", Sex, "<br>"),
+        mode = "lines",
+        color = ~Sex,
+        colors = c(
+           "#15455e",
+          "#2B8CBE"
+                  ),
+        hoverinfo = "skip",
+  showlegend = F) %>%
+  add_trace(
+    x = ~Year, 
+        y = ~ASIR, 
+        type = "scatter",
+        text = ~paste0("<b>", Year, "</b>",", ", Sex, "<br>"),
+        mode = "markers",
+        color = ~Sex,
+    colors = c("#1d5e80",
+          "#2B8CBE"),
+    opacity = 0.5,
+    marker = list(
+      line = list(
+        color = '#000000',
+        width = 0.8
+      )),
+        hovertemplate = paste(
+      "<b>%{text}</b>",
+      "%{yaxis.title.text}: %{y:.1f}"
+      # "<extra></extra>"
+  ),
+  showlegend = F) %>% 
+  layout(
+         xaxis = list(title = 'Year',
+                      showgrid = T),
+         yaxis = list (title = 'Age-Standardized Rate<br>(per 100,000 persons)',
+                                              titlefont = list(color = "white"),
+                       showgrid = T,
+                       hoverformat = '.1f',
+                       zeroline = T,
+                       range = c(0, 220)
+                       ),
+         # legend = list(orientation = "h",   # show entries horizontally
+         #             xanchor = "center",  # use center of legend as anchor
+         #             x = 0.5,
+         #              y = -0.2),
+         hovermode = "x") 
+
+subplot(breast, prostate, colorectal, lung, nrows = 2, shareX = T, shareY = T, titleX = F, titleY = T,
+        margin = 0.02
+        ) %>% 
+  layout(
+    annotations = list(
+ list(x = 0, y = 1.025, text = "<b>Female Breast</b>", showarrow = F, xref='paper', yref='paper', font = list(size = 16)),
+ list(x = 0.6, y = 1.025, text = "<b>Prostate</b>", showarrow = F, xref='paper', yref='paper', font = list(size = 16)),
+  list(x = 0 , y = 0.5, text = "<b>Colorectal</b>", showarrow = F, xref='paper', yref='paper', font = list(size = 16)),
+ list(x = 0.6 , y = 0.5, text = "<b>Lung</b>", showarrow = F, xref='paper', yref='paper', font = list(size = 16))),
+ autosize = T, height = 600
+ ) %>% 
+  layout(annotations = list(
+                list(x = -0.11 , y = 0.5, text = "Age-Standardized Rate<br>(per 100,000 persons)",
+                     font = list(size = 14),
+                     textangle = 270,
+                     showarrow = F, xref='paper', yref='paper'),
+                list(x = 0.5 , y = -0.15, text = "Year",
+                     font = list(size = 14),
+                     textangle = 0,
+                     showarrow = F, xref='paper', yref='paper')
+                
+                )) 
+  # config(
+  #        # save to desired format
+  #        toImageButtonOptions = list(
+  #         format = "png",
+  #         width = 1200,
+  #         height = 1000
+  #        ))
+
+```
+
+
+#### Prostate {#prostate}
+
+Prostate cancer incidence was on the rise until the mid-1990s, but overall has declined for several years in our province. In recent years however the decline has sharpened. Figure \@ref(fig:figure41) above shows that the rate of prostate cancer within the past decade has declined on average by about 4.0% per year. If one uses a special analysis that examines cancer trends for important "change points" -- meaning a time point at which the trend in rates changes significantly -- it is apparent that since 1992, prostate cancer incidence rates have declined, with a sharper declining trend observed since 2009. This is in contrast to the increasing trend observed between 1970 and 1992, at about 4.4% per year.
+
+The declining trend in the past decade is very likely due to changes in the intensity with which prostate specific antigen -- or PSA -- testing has been performed in the general population. The PSA test has been used as an ad hoc screening test for prostate cancer across many parts of the world including BC and has been tied to changes in prostate cancer incidence in BC in the past @Coldman2003. As early as 2011, a preventative task force in the US (and later in Canada) recommended against prostate cancer screening with the PSA test, based on an assessment of the risks and benefits associated with PSA as a screening test . The trend observed in BC has also been observed nationally in Canada @Ellison2016 and the US where data from the US National Cancer Institute reported a decline of nearly 10% per year in prostate cancer incidence between 2010 and 2014 @NationalCancerInstitute. The decline in prostate cancer incidence has a strong impact on the trend in all-cancer incidence among males since prostate cancer is the most common male cancer in BC. Thus if this decline persists, we will likely continue to see further declines in overall cancer incidence in BC males.
+
+#### Female breast {#female-breast}
+
+Annual female breast cancer incidence in BC has fluctuated over the past decade but overall, incidence rates have remained relatively stable over this period (Figure \@ref(fig:figure41)). However, as seen in the "change points" analysis in Figure \@ref(fig:figure41), the trend has been declining since 2011 by 0.6% per year. In Canada generally, the breast cancer incidence rate stabilized from 2004 through 2013 after rising in the 1990's in response to the introduction of breast screening, and then declining in the early 2000's perhaps in response to decreased usage of hormone replacement therapy @CanadianCancerSociety. Similarly, in the US, rates have been stable over the last ten years @NationalCancerInstitute. Similar to the largely stable rates in North America, invasive breast cancer rates in the last decade in the UK have increased by about 5% overall @CancerResearchUKb.
+
+Factors related to the trend in BC over the last decade are made especially difficult by the fact that population data typically do not include information on key variables in breast cancer risk, such as menopausal status. Long-term changes in hormonal factors, such as early age at menarche, as well as changes in behaviours such as delayed childbearing, having fewer children, and breastfeeding may also play a part @CanadianCancerStatisticsAdvisoryCommittee2019.
+
+#### Colorectal
+
+Colorectal cancer incidence has decreased among females and males in the past decade (AAPC's of -1.6% and -2.7%, respectively). In examining the trend plots in Figure \@ref(fig:figure41) one can see a fluctuating rate for males up until 2014 and a decline thereafter. Among females, there are notable fluctuations in the rates since 1970 but has generally declined. To note, drops in the incidence rate in the most recent years are of significant interest. BC Cancer formally announced the Colon Screening Program in 2012, which would be expected to impact incidence rates for this cancer. It might have been expected to see an increase in incidence shortly after the introduction of the program instead of a decline in rates, as first time participants complete their first screen for cancer and previously undiagnosed tumours are found. This strong decline in cancer incidence over this period might thus reflect the impacts of screening that happened in BC prior to the formal program being initiated in addition to some of the early benefits of the program after its inception. Incidence rates for cancers of the colon and rectum will be monitored in BC with interest to assess the impact of this program over the coming years.
+
+#### Lung
+
+Lung cancer is an example of a cancer that has had very different trends between males and females over recent years, both in BC as well as for Canada as a whole. Incidence rates among males have been dropping sharply in BC for more than 30 years (since 1985); incidence rates have dropped by 1.9% per year over the past decade. The pattern for BC females however is quite different. Rates have been slightly increasing since 1992 (APC = 0.1%). The declining pattern observed in men has not yet been observed in women.
+
+*Why might this pattern look different in males and females?* Lung cancer incidence has been largely driven by past smoking rates in the population. The smoking rates for males and females were not historically the same. Additional risk factors for lung cancer include some occupational hazards that may be more common among men, such as asbestos exposure in construction and automotive occupations. Radon and air pollution are other contributors to lung cancer incidence, but there is not a strong rationale for this factor affecting males differently than females.
+
+### Cancers with notable changes
+
+In this section we review cancer trends for a select number of cancers shown in Figure \@ref(fig:figure31). We have chosen to highlight cancers that demonstrate stronger changes (either increasing or decreasing) over the last decade and offer some information about why we might be observing these changes.
+
+#### Thyroid
+
+Thyroid cancer has been one of the fastest growing cancers with respect to incidence for many years in BC for both men and women. Incidence rates have increased by 4.6% per year over the past decade for males and by 1.7% per year among females. These rapid increases in cancer incidence pre-date the past decade and have been observed in many jurisdictions back as far as the 1980's. The Canadian national statistics @CanadianCancerStatisticsAdvisoryCommittee2019 reported similar AAPC's to those identified in our report, though rates were reported to have stabilized among females since 2011. Changing trends in thyroid cancer incidence rates were also reported in a recent Canadian study. From 2012 to 2016, thyroid cancer incidence rates declined among females and stabilized among males @Ellison2020. In many other countries, the incidence of thyroid cancer, mainly papillary carcinomas, has also increased. This increase is hypothesized to be due mainly to increased detection as well as over-diagnosis of indolent papillary tumours @LaVecchia2015. A recent study from Ontario found that thyroid cancer incidence varied significantly across the province and was "strongly related to the variation in rates of use of discretionary medical tests including diagnostic ultrasound". @Hall2014. However other studies observed increases in the incidence of larger thyroid tumours, late stage papillary tumours and increases in thyroid cancer mortality rates @Lim2017, suggesting that a portion of the increase in thyroid cancer may be due to a real increase in clinically significant cancers.
+
+In addition to increased detection, a number of variables have been suggested as playing a role in the increasing incidence of thyroid cancer. Important factors may include exposure to ionizing radiation, iodine intake, chemical exposures and obesity [@Lim2017; @Wirth2017]. Particularly relevant to thyroid cancer is the distribution of iodine-131, a harmful isotope of iodine which can accumulate in the thyroid and has been known to contaminate large areas. A range of environmental toxins and pollutants have also been considered, in particular polybrominated diphenyl ethers (or PBDEs) such as fire retardant materials and other chemicals @Pellegriti2013. Decreases in smoking behaviour may also be involved, as smoking is inversely associated with thyroid cancer risk @Kitahara2012.
+
+#### Liver
+
+In BC, liver cancer has been rising at 2.3% per year in women and 3.2% in men over the last decade. In Canada, primary liver cancer has tripled since the early 1980s @De2013, and is rising by 3.6% per year among men, and 1.7% per year among women @CanadianCancerStatisticsAdvisoryCommittee2019. The BC rates, especially in women are considerably higher than the overall Canadian rates, and the reason for this is not clear.
+
+In the US, incidence of liver cancer has also tripled since the 1980s, increasing 2.7% per year over the last decade @AmericanCancerSociety. Worldwide, the highest rates for this cancer are reported in Asian and African countries. This is in large part because infection with hepatitis B or C virus is the major risk factor for primary liver cancer. Immigration from countries where hepatitis infection is endemic may be one driver of the recent increases seen in Canada. Liver cancer is more common in less developed countries, with approximately 50% of new cases of liver cancer in 2012 in China alone though recently rates there have been reported to be declining @Ferlay2018.
+
+Obesity may also be partly responsible for the increased liver cancer rates. One UK study estimated that about 10% of liver cancers are attributable to excess weight @Bhaskaran2014. Non-alcoholic fatty liver disease associated with obesity, insulin resistance and type II diabetes is increasingly being recognized as a trigger for liver cancer in Western populations @Aleksandrova2016. Other identified factors include alcohol, cirrhosis of the liver, and exposure to aflatoxin @De2013.
+
+#### Melanoma of the Skin
+
+Incidence rates of melanoma of the skin have historically shown a strong increasing trend among BC males and females. Rates among males have stabilized (AAPC = 0.6%) for but increased for females (AAPC = 2.1%) over the past decade. Overall, rates among males were increasing steadily primarily among older age groups, until 2011 where rates stabilized. For females, rates among older adults are still increasing strongly at an average of 2.7% per year. Rates among younger males and females (\<45 years) have been declining in recent years in our province. This pattern is similar to what has been reported nationally in Canada @CanadianCancerSocietysAdvisoryCommitteeonCancerStatistics2014.
+
+Melanoma incidence is strongly influenced by past exposure to ultraviolet radiation from the sun. It is likely these trends represent the impacts of past excess sun exposure in older BC adults. Indoor tanning beds have also been identified as a cause of melanoma. A number of pigmentary characteristics are associated with a higher risk of melanoma including having a fair complexion, light eye colour, red or blonde hair and skin that freckles and burns easily. There is also an increased risk of melanoma in individuals that have a family history of this cancer. Melanoma is nevertheless, a very preventable cancer and it is hopeful that the more favorable trends that have been observed in younger age groups in recent years reflect positive impacts of cancer prevention efforts.
+
+#### Multiple Myeloma
+
+For multiple myeloma, reports on incidence trends in different regions have been mixed. Here in BC, we have seen an AAPC of approximately 0.7% for males and 0.5% for females over the past decade. Nationally, multiple myeloma showed a stable trend among males until 2007, whereby the rate has been increasing. Among females, the incidence has increased steadily since at 1984 at about 0.6% per year @CanadianCancerStatisticsAdvisoryCommittee2019. In the UK, rates have shown an absolute increase of 30% since the early 1990's and 15% over the past decade @CancerResearchUK. The increasing trends observed in the UK were stronger for males than females. The US SEER data indicate that US incidence rates have remained fairly stable with only slight increases over the last 10 years @NationalCancerInstitute.
+
+There are few established causes of multiple myeloma. Obesity has been suggested as a risk factor as well as a family history of multiple myeloma; males also appear to be at higher risk than females @CanadianCancerStatisticsAdvisoryCommittee2019, @Becker2011. US data suggest race is associated with multiple myeloma risk as black Americans have higher rates compared to white Americans @Howlander2019. Additionally, trends may be influenced by improved detection, as well as improved case ascertainment @CanadianCancerStatisticsAdvisoryCommittee2019.
+
+#### Oral
+
+In BC, oral cancer has increased over the past decade among males (AAPC = 2.7%) and slightly increased among females (AAPC = 1.3%). Nationally, oral cancers appear to be increasing for both males and females @CanadianCancerStatisticsAdvisoryCommittee2019. Oral cancer historically have followed smoking patterns and smoking-related oral cancers have generally declined @Auluck2010. However, in recent years, oral cancers associated with HPV infection have risen and are now responsible for a higher percentage of cases. This pattern was observed elsewhere in Canada @Auluck2010 and the US @Weatherspoon2015. Other known risk factors include alcohol consumption and poor fruit and vegetable consumption @CancerResearchUKa.
+
+#### Stomach
+
+Stomach cancer incidence rates have declined for many years in BC. It remains one of the most rapidly declining cancers in our population. Over the past decade, decreasing patterns were observed for both males (AAPC= -2.3%) and females (AAPC= -1.1%) in BC, consistent with trends observed nationally @CanadianCancerStatisticsAdvisoryCommittee2019. Globally, there is strong variation in the incidence of stomach cancer. Recent international data @Luo2017 suggest that the rates of this cancer in some Asian, South American and Eastern European countries are many times higher than the Canadian rates. However, almost all countries examined a declining trend in this report.
+
+The decline in stomach cancer incidence overall in Canada and BC are possibly related to the recognition, treatment and improved management of *Helicobacter pylori* infection, and declines in smoking prevalence as smoking @CanadianCancerStatisticsAdvisoryCommittee2019. Declines might also relate to changes over time in diet as salted, cured and processed meats, as well as alcohol consumption, are associated with stomach cancer risk.
+
+#### Larynx
+
+Laryngeal cancer incidence rates among males have been steadily declining since they peaked in the mid-1980s. Over the past decade, incidence rates declined by an average of 2.8% per year. Among females, incidence rates have also been declining, although the decline started later in 1995. Over the past decade, incidence rates declined by an average of 4.1% per year. Similar trends, including the delayed and stronger decline among females, were observed nationally @CanadianCancerStatisticsAdvisoryCommittee2019. Laryngeal cancer is strongly associated with smoking. Declining rates and the delayed decline among female likely reflects patterns in smoking rates @CanadianCancerStatisticsAdvisoryCommittee2019.
+
+#### Kidney
+
+Since 1970, kidney cancer incidence rates generally increased for both sexes until the late 1980s and stabilized thereafter until 2004 for females and 2008 for males, whereby rates began to increase again. Over the past decade, rates increased by an average of 3.5% per year for males and females. Nationally, incidence rates have shown modest increases since 1985 but a stable trend since 2007 for females and 2011 for males @CanadianCancerStatisticsAdvisoryCommittee2019. In BC, the increasing rates in the past decade are possibly an artifact of recent cancer registry efforts to improve the case capture of kidney cancer.
+
+<!-- ### Trends in cancer incidence by age, cancer sub-types and geography -->
+### Trends by subtype
+
+Examining cancer trends in our population provides us with important information to plan for cancer care, identify priorities for public health interventions and suggest areas for further research. Cancers with patterns that appear flat or unchanging may initially suggest that these cancers don't require the same degree of attention than those exhibiting changes do. However, some cancers that appear stable in our population may in fact show interesting patterns when the data are examined in different ways. In this section we discuss how trends may appear different for a few specific cancers when we consider the potential for different trends across age groups, sub-types of a given cancer as well as by geographic regions within our province.
+
+#### Esophageal cancer by subtype
+
+Esophageal cancer incidence trends appear to differ between males and females. In the past decade, rates of new cases among males have slightly increased (AAPC = 0.7%) while rates among females have slightly decreased (AAPC = -0.3%). This pattern was also observed in Canadian national data @CanadianCancerStatisticsAdvisoryCommittee2019.
+
+A recent study from Canada noted that subtypes of esophageal cancers called "squamous cell" (SC) cancers were declining in Canada whereas another subtype known as "adenocarcinomas" (AC) were increasing rapidly @Otterstatter2012. The authors noted differences in the risk factors for these two types of esophageal cancers, although overlapping, and that trends in these risk factors might help to explain the patterns observed @Otterstatter2012. For example, Barrett's esophagus, gastric reflux and obesity are linked to AC tumours, cancers which are increasing in the population; whereas smoking and alcohol consumption were more commonly associated with the declining SC tumours @Otterstatter2012.
+
+When examining BC data (Tables \@ref(tab:eso1) & \@ref(tab:eso2)), we see similar rising patterns for AC esophageal cancers and declining patterns among SC cancers. When we look specifically at where in the esophagus the tumours are arising (lower third, middle third or upper third), we see that the rates of cancers within the lower third of the esophagus are rising most rapidly. This is consistent with evidence that most AC tumours (observed to have rising rates) are identified in the lower esophagus whereas the SC tumours (with declining rates) are identified in the middle or upper esophagus @Otterstatter2012.
+
+```{r eso1, echo=FALSE, message=FALSE, warning = F, out.width = '100%'}
+read.csv("Analysis/data_for_bookdown/table_esophagus_hist.csv") %>% 
+  rename("Histology subtype" = 1, "Female AAPC" = 2, "Male AAPC" = 3) %>% 
+  select(1,3,2) %>% 
+  kable(., format = "html",
+        caption ='Average annual percentage change in esophageal cancer incidence by histological subtype and sex, 2009-2018.') %>% 
+  kable_styling(bootstrap_options = c("striped", "hover"), position = "left") 
+
+```
+
+```{r eso2, echo=FALSE, message=FALSE, warning = F, message=FALSE, out.width = '100%'}
+read.csv("Analysis/data_for_bookdown/table_esophagus_loc.csv") %>% 
+  rename("Subsite" = 1, "Female AAPC" = 2, "Male AAPC" = 3) %>% 
+  slice(1,2,4,3) %>% 
+  select(1,3,2) %>% 
+  mutate(`Female AAPC` = case_when(
+    Subsite == "Upper" ~ 0.24,
+    T ~ `Female AAPC`
+  )) %>% 
+  kable(., format = "html",
+        caption ='Average annual percentage change in esophageal cancer incidence by anatomical location (subsite) and sex, 2009-2018.') %>% 
+  kable_styling(bootstrap_options = c("striped", "hover"), position = "left")
+```
+
+#### Colorectal cancer by age
+
+As noted above, colorectal cancer incidence has been generally stable, albeit a slight decline, among females and males in recent years. When examining colorectal cancer trends for the population as a whole however, it masks an interesting pattern by age group. Examining the rates of colorectal cancer by age (Table \@ref(tab:cr1)) reveals a strong increase in young people (those aged less than 50 years) and decline among older adults (those aged 50 years and over). Among young males and females, the AAPCs were 2.5% and 2.1% respectively, suggesting an increasing trend. Among older males and females, the AAPCs were -3.2% and -2.5% respectively, suggesting a declining trend.
+
+```{r cr1, echo=FALSE, message=FALSE, warning = F, out.width = '100%'}
+read_csv("Analysis/data_for_bookdown/Colorectal_Age_Groups.csv") %>% 
+  select("Age group" = 1, "Male AAPC" = 3, "Female AAPC" = 2) %>% 
+  kable(., 
+        caption ='Average annual percentage change in colorectal cancer incidence by age at diagnosis and sex, 2009-2018') %>% 
+  kable_styling(bootstrap_options = c("striped", "hover"), position = "left") 
+
+```
+
+The different trends across age groups are not fully understood at this time but have been reported from a number of US and Canadian studies [@Brenner2019; @Brenner2017; @Siegel2017; @Ward2019]. One Canadian study suggested that increasing excess body weight at young ages might be a potential factor contributing to the increase trend @Brenner2017. A recent examination of colorectal cancer incidence trends in Surveillance, Epidemiology and End Results (SEER) areas from 1974 to 2013 found a strong birth cohort effect @Siegel2017. Compared with adults born circa 1950, those born circa 1990 were observed to have double the risk of colon cancer and quadruple the risk of rectal cancer. Nearly one-third of rectal cancer patients were less than 55 years of age at diagnosis @Siegel2017. The authors suggested this birth cohort effect may signal relatively recent changes in risk exposures, such as obesity and unhealthy dietary components like high-glycemic index carbohydrates. Increased detection is not thought to play a large role among younger age groups who are unlikely to be screened, and for whom rates have risen for both early and advanced stage disease @Siegel2017.
+
+Further research is needed to better understand what factors are contributing to the rapid increase in colorectal cancer among younger adults. It is also worth noting that despite more rapidly increasing rates in young people, the majority of new colorectal cancer diagnoses still occur in adults older than 50 years of age (e.g. greater than 90%).
+
+#### Lung cancer by region
+
+In the previous section we described how lung cancer incidence rates among males were dropping at a fairly steady pace while rates among females appeared fairly stable in the past decade. However when cancers relate strongly to risk factors, which may vary across the province, cancer trends will often vary geographically as well. This is precisely what we see when we examine lung cancer incidence at a regional-level in BC. In this section we present trends in lung cancer incidence for males and females for each of the five regional health authorities over the past 30 years (Figure \@ref(fig:figure51)).
+
+If we first examine the trends regionally for males we see that all five of the regions demonstrate a similar downward trend over the past 30 years. When we look more closely, we can see that the decline is slightly stronger in some regions (e.g. Vancouver Coastal) compared to others (e.g. Northern). Also, some of the lines are typically higher in the plot than others meaning that, on average, the lung cancer rates are higher in those regions.
+
+If we examine the trends by region for females, we see a very different picture. Lung cancer rates have generally increased for all regions except Vancouver Coastal. Rates in the Interior, Island and Fraser saw similar strong increases early on but the rates have since stabilized in Fraser and the Island. Rates in the Interior continue to increase. In the North, rates have increased the strongest and also continues to increase. The declining trend in Vancouver Coastal suggests this region has had more success in reducing new lung cancer cases.
+
+This analysis demonstrates the importance of looking at trends in different ways. For lung cancer, our initial plot at the provincial level suggested something interesting -- that males and females have different trend patterns. However what we see from the plot below, is that the provincial trend pattern may not apply to all areas of the province. The most relevant risk factor, smoking has declined in Canada but socioeconomic differences exist @Corsi2014. In low socioeconomic groups the prevalence of smoking peaked later, and the decline has been less steep. Although British Columbia has the lowest rates of smoking among the Canadian provinces, there are still significant geographic differences in this risk factor @Corsi2013.
+
+```{r figure51, echo=FALSE, warning = F, fig.cap='Trends in lung cancer incidence by region and sex, British Columbia, 1986-2017.', fig.height = 6, out.width = '100%'}
+
+plot_df <-
+read.csv("Analysis/data_for_bookdown/Lung_HA.csv")
+
+males <-
+plot_df %>%
+  filter(SEX == "Males") %>% 
+  plot_ly(.,
+        x = ~YEAR, 
+        y = ~ASR_Model, 
+        type = "scatter",
+        text = ~paste0(YEAR, "<br>", HA),
+        mode = "lines",
+        color = ~HA,
+        colors = viridis_pal(option = "D")(5),
+  #       hoverinfo = "skip") %>%
+  # add_trace(
+  #   x = ~YEAR, 
+  #       y = ~ASR, 
+  #       type = "scatter",
+  #       text = ~YEAR,
+  #       mode = "markers",
+  #       color = ~HA,
+  #           opacity = 0.5,
+  #   marker = list(
+  #     line = list(
+  #       color = '#000000',
+  #       width = 0.8
+      # )),
+        # colors = c(#"#2B8CBE", 
+        #            "#810F7C"),
+        hovertemplate = paste(
+      "<b>%{text}</b><br>",
+      "%{yaxis.title.text}: %{y:.1f}"
+      # "<extra></extra>"
+  ),
+  showlegend = T) %>% 
+  layout(
+         xaxis = list(title = 'Year',
+                      showgrid = T),
+         yaxis = list (title = 'Age-Standardized Rate<br>(per 100,000 persons)',
+                                              titlefont = list(color = "white"),
+                       showgrid = T,
+                       hoverformat = '.1f',
+                       zeroline = T,
+                       range = c(0, 120)
+                       ),
+         legend = list(orientation = "h",   # show entries horizontally
+                     xanchor = "center",  # use center of legend as anchor
+                     x = 0.5,
+                      y = -0.2),
+         hovermode = "x") 
+
+
+females <-
+plot_df %>%
+  filter(SEX == "Females") %>% 
+  plot_ly(.,
+        x = ~YEAR, 
+        y = ~ASR_Model, 
+        type = "scatter",
+        text = ~paste0(YEAR, "<br>", HA),
+        mode = "lines",
+        color = ~HA,
+        colors = viridis_pal(option = "D")(5),
+  #       hoverinfo = "skip") %>%
+  # add_trace(
+  #   x = ~YEAR, 
+  #       y = ~ASR, 
+  #       type = "scatter",
+  #       text = ~YEAR,
+  #       mode = "markers",
+  #       color = ~HA,
+  #           opacity = 0.5,
+  #   marker = list(
+  #     line = list(
+  #       color = '#000000',
+  #       width = 0.8
+      # )),
+        # colors = c(#"#2B8CBE", 
+        #            "#810F7C"),
+        hovertemplate = paste(
+      "<b>%{text}</b><br>",
+      "%{yaxis.title.text}: %{y:.1f}"
+      # "<extra></extra>"
+  ),
+  showlegend = F) %>% 
+  layout(
+         xaxis = list(title = 'Year',
+                      showgrid = T,
+                                           font = list(size = 14)),
+         yaxis = list (
+           title = 'Age-Standardized Rate<br>(per 100,000 persons)',
+                                              titlefont = list(color = "white"),
+                       showgrid = T,
+                       hoverformat = '.1f',
+                       zeroline = T,
+                       range = c(0, 120)
+                       ),
+         legend = list(orientation = "h",   # show entries horizontally
+                     xanchor = "center",  # use center of legend as anchor
+                     x = 0.5,
+                      y = -0.2),
+         hovermode = "x") 
+
+subplot(males, females, nrows = 2, shareX = T, shareY = T, titleX = F, titleY = T,
+        margin = 0.1
+        ) %>% 
+  layout(
+    annotations = list(
+ list(x = 0, y = 1.05, text = "<b>Males</b>", showarrow = F, xref='paper', yref='paper', font = list(size = 16)),
+  list(x = 0 , y = 0.45, text = "<b>Females</b>", showarrow = F, xref='paper', yref='paper', font = list(size = 16))),
+ autosize = T
+ ) %>% 
+  layout(annotations = list(
+                list(x = -0.1 , y = 0.5, text = "Age-Standardized Rate<br>(per 100,000 persons)",
+                     font = list(size = 14),
+                     textangle = 270,
+                     showarrow = F, xref='paper', yref='paper'),
+                list(x = 0.5 , y = -0.15, text = "Year",
+                     font = list(size = 14),
+                     textangle = 0,
+                     showarrow = F, xref='paper', yref='paper')
+                
+                )) %>%
+  config(
+         # save to desired format
+         toImageButtonOptions = list(
+          format = "png",
+          width = 1000,
+          height = 800
+         ))
+```
+
+## Conclusion
+
+This year's BCCR report presents detailed information on cancer incidence trends for cancers that represent the largest cancer burden in BC and those where we have seen notable changes in cancer risk in the past decade. Examining trends in the rates of cancers in our population provides important information to plan for cancer care, identify priorities for public health interventions and suggest areas of need for further research.
+
+### Summary of main findings
+
+#### All cancers combined
+
+Overall, the rate for all cancers among males declined slightly and remained relatively stable among females in the past decade. Despite generally stable rates in all cancers combined, the number of cancers steadily increased. This is largely due to population aging and growth in BC, an observation that is also observed across Canada. *What does this mean?* Despite a slightly *decreasing rate* of new cancers among males and a *stable rate* among females, we are seeing the *actual number of cancer cases rising*. This has important health implications as the demand for cancer care services, and follow-up care, are expected to increase.
+
+#### By cancer type
+
+Trends for all cancers combined are driven by trends in certain cancer types. For example, the decline among males can be explained in part by a strong recent drop in prostate cancer incidence, which is the most common cancer among males in Canada. In the past decade, we observed important increasing trends among thyroid, kidney, liver, and oral cancers for males, and kidney, liver, and melanoma (skin) cancers for females. Important decreases were observed among prostate, larynx, colorectal and stomach cancers for males and larynx and ovary cancers for females. Moderate changes were also observed among other cancers, which are described [earlier in this report](#cancer-trends-in-bc). Importantly, some cancers that appear to have stable rates in our population may in fact show interesting patterns when the data are examined in different ways. For example, colorectal cancer among younger adults (less than 50 years) are strongly increasing while decreasing among older adults (50 years and older). Lung cancer rates show strong variation across BC health authority regions and esophageal cancer by histology type and anatomical location.
+
+### Influencing future cancer trends
+
+#### About 4 in 10 cancers can be prevented by targeting modifiable risk factors
+
+Nearly four in ten cancer cases can be prevented by targeting modifiable risk factors and healthy public policies. Important lifestyle factors that contribute to the risk of developing cancer are tobacco use, high alcohol consumption, diets high in red meat and salt, excess body weight, and physical inactivity. Importantly, our risk of cancer is also largely influenced by the social determinants of health, such as poverty, housing, education, and food security, as well as the built environment.
+
+#### The HPV Vaccine: A vaccine that prevents cervical cancers, among others
+
+Many cancers are caused by previous viral infection, as is the case with cervical cancers, and many liver, and head and neck cancers, among others.  For example, Human papilloma virus (HPV) is one of the most common sexually transmitted infections. Although the majority of individuals infected with HPV do not go on to develop cervical cancer, we know that nearly *all* cervical cancers are caused by an HPV infection. Many head and neck cancers, as well as anal, vaginal, and penile cancers, are also associated with an HPV infection. HPV vaccination among girls and boys is a safe, effective and an evidence-based approach to prevent HPV infection and therefore, prevent cancers caused by HPV. Population-based HPV vaccination programs exist in many countries across the world and when implemented with cervical cancer screening programs, has the potential to eliminate cervical cancer in the future.  
+
+#### Early detection of cancer through provincial cancer screening programs
+
+Cancer screening of average-risk, healthy individuals is one of many strategies to detect cancer early and sometimes even before a cancer develops. Detecting cancer early can reduce future cancer incidence and mortality, and offer greater opportunity for successful treatment and improved survival. In BC, cancer screening for breast, cervix and colon cancers are delivered through provincial organized screening programs. Additionally, BC just launched Canada's first province-wide Lung Screening Program. These programs offer population-wide coverage by coordinating invitations and reminders, and enable monitoring and evaluation of program effectiveness through data collection and reporting.
+
+------------------------------------------------------------------------
