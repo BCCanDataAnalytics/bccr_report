@@ -11,7 +11,7 @@ documentclass: book
 bibliography: references.bib
 csl: vancouver-superscript.csl
 link-citations: true
-description: "BC Cancer Registry 2019 Report."
+description: "BC Cancer Registry Report 2019."
 ---
 
 # About BC Cancer
@@ -38,4 +38,4 @@ This report was prepared by BC Cancer's Data and Analytics team. This publicatio
 
 Material appearing in this publication may be reproduced or copied without permission; however, the following citation must be used to indicate the source:
 
-Data and Analytics, BC Cancer. BC Cancer Registry Annual Report. Vancouver, BC: BC Cancer; 2022. [October, 2022]
+Data and Analytics, BC Cancer. BC Cancer Registry Annual Report 2019. Vancouver, BC: BC Cancer; 2022. [October, 2022]
